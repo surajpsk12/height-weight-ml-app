@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { cmToFtInches, kgToLbs } from "@/lib/api";
+import { cmToFtInches, kgToLbs } from "../lib/api";
 import { Info, Users } from "lucide-react";
 
 export const RegressionPlot = ({

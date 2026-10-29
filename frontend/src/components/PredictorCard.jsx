@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { kgToLbs, lbsToKg, cmToFtInches } from "@/lib/api";
+import { kgToLbs, lbsToKg, cmToFtInches } from "../lib/api";
 import {
   CheckCircle2,
   Minus,
