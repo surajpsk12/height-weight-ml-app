@@ -34,7 +34,7 @@ Here is what I built from scratch:
 • Zero-downtime architecture: Built-in mathematical fallback ensures 100% interactive uptime even during backend cold starts.
 
 🛠️ Tech Stack:
-Python 3.13 | Scikit-Learn | Pandas | NumPy | FastAPI | Pydantic | Next.js 16 | React 19 | TailwindCSS | TypeScript | Vercel | Render
+Python 3.13 | Scikit-Learn | Pandas | NumPy | FastAPI | Pydantic | Next.js 16 | React 19 | TailwindCSS | JavaScript | Vercel | Render
 
 🔗 Check out the project:
 • GitHub Repository: [Insert your GitHub URL here]

@@ -1,7 +1,9 @@
 """
-Height-Weight Linear Regression Model Training Pipeline
-Trains a Linear Regression model with StandardScaler on height-weight dataset.
-Saves model, scaler, and rich metadata for production API and frontend visualization.
+Height-Weight Bidirectional Linear Regression Model Training Pipeline
+Trains:
+1. Weight -> Height model (StandardScaler on Weight)
+2. Height -> Weight model (StandardScaler on Height)
+Saves models, scalers, and rich metadata for production API and frontend visualization.
 """
 
 import json
@@ -15,88 +17,102 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import joblib
 
 
-def train_model():
+def train_models():
     base_dir = Path(__file__).resolve().parent
     repo_root = base_dir.parent
     data_path = repo_root / "data_source_excel" / "height-weight.csv"
 
     if not data_path.exists():
-        # Fallback to local data folder if running in standalone backend
         data_path = base_dir / "height-weight.csv"
 
     print(f"Loading dataset from: {data_path}")
     df = pd.read_csv(data_path)
     print(f"Dataset loaded: {len(df)} records.")
-    print(df.head())
 
-    X = df[["Weight"]]
-    y = df["Height"]
+    # 1. Weight -> Height Model
+    X_w = df[["Weight"]]
+    y_h = df["Height"]
 
-    # Match notebook split: test_size=0.25, random_state=42
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.25, random_state=42
+    X_train_w, X_test_w, y_train_h, y_test_h = train_test_split(
+        X_w, y_h, test_size=0.25, random_state=42
     )
 
-    # Standardization
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    scaler_w = StandardScaler()
+    X_train_w_scaled = scaler_w.fit_transform(X_train_w)
+    X_test_w_scaled = scaler_w.transform(X_test_w)
 
-    # Model fitting
-    model = LinearRegression()
-    model.fit(X_train_scaled, y_train)
+    model_w2h = LinearRegression()
+    model_w2h.fit(X_train_w_scaled, y_train_h)
 
-    # Predictions
-    y_pred_train = model.predict(X_train_scaled)
-    y_pred_test = model.predict(X_test_scaled)
+    y_pred_h_test = model_w2h.predict(X_test_w_scaled)
+    y_pred_h_train = model_w2h.predict(X_train_w_scaled)
 
-    # Metrics evaluation
-    mse_test = mean_squared_error(y_test, y_pred_test)
-    rmse_test = float(np.sqrt(mse_test))
-    mae_test = float(mean_absolute_error(y_test, y_pred_test))
-    r2_test = float(r2_score(y_test, y_pred_test))
+    mse_h = mean_squared_error(y_test_h, y_pred_h_test)
+    rmse_h = float(np.sqrt(mse_h))
+    mae_h = float(mean_absolute_error(y_test_h, y_pred_h_test))
+    r2_h_test = float(r2_score(y_test_h, y_pred_h_test))
+    r2_h_train = float(r2_score(y_train_h, y_pred_h_train))
 
-    r2_train = float(r2_score(y_train, y_pred_train))
+    n_test = len(y_test_h)
+    adj_r2_h = float(1 - ((1 - r2_h_test) * (n_test - 1) / (n_test - 1 - 1)))
 
-    # Adjusted R2 for test set
-    n_test = len(y_test)
-    p = 1
-    adj_r2_test = float(1 - ((1 - r2_test) * (n_test - 1) / (n_test - p - 1)))
+    # 2. Height -> Weight Model
+    X_h = df[["Height"]]
+    y_w = df["Weight"]
+
+    X_train_h, X_test_h, y_train_w, y_test_w = train_test_split(
+        X_h, y_w, test_size=0.25, random_state=42
+    )
+
+    scaler_h = StandardScaler()
+    X_train_h_scaled = scaler_h.fit_transform(X_train_h)
+    X_test_h_scaled = scaler_h.transform(X_test_h)
+
+    model_h2w = LinearRegression()
+    model_h2w.fit(X_train_h_scaled, y_train_w)
+
+    y_pred_w_test = model_h2w.predict(X_test_h_scaled)
+    y_pred_w_train = model_h2w.predict(X_train_h_scaled)
+
+    mse_w = mean_squared_error(y_test_w, y_pred_w_test)
+    rmse_w = float(np.sqrt(mse_w))
+    mae_w = float(mean_absolute_error(y_test_w, y_pred_w_test))
+    r2_w_test = float(r2_score(y_test_w, y_pred_w_test))
+    r2_w_train = float(r2_score(y_train_w, y_pred_w_train))
+    adj_r2_w = float(1 - ((1 - r2_w_test) * (n_test - 1) / (n_test - 1 - 1)))
 
     pearson_r = float(df["Weight"].corr(df["Height"]))
 
-    slope = float(model.coef_[0])
-    intercept = float(model.intercept_)
-    mean_weight = float(scaler.mean_[0])
-    scale_weight = float(scaler.scale_[0])
+    slope_w2h = float(model_w2h.coef_[0])
+    intercept_w2h = float(model_w2h.intercept_)
+    mean_w = float(scaler_w.mean_[0])
+    scale_w = float(scaler_w.scale_[0])
 
-    print("\n--- Model Training Results ---")
-    print(f"Slope (beta_1): {slope:.4f}")
-    print(f"Intercept (beta_0): {intercept:.4f}")
-    print(f"Scaler Mean (mu): {mean_weight:.4f}")
-    print(f"Scaler Scale (sigma): {scale_weight:.4f}")
-    print(f"Train R^2: {r2_train:.4f}")
-    print(f"Test R^2: {r2_test:.4f}")
-    print(f"Test Adjusted R^2: {adj_r2_test:.4f}")
-    print(f"Test MAE: {mae_test:.4f} cm")
-    print(f"Test MSE: {mse_test:.4f}")
-    print(f"Test RMSE: {rmse_test:.4f} cm")
-    print(f"Pearson Correlation (r): {pearson_r:.4f}")
+    slope_h2w = float(model_h2w.coef_[0])
+    intercept_h2w = float(model_h2w.intercept_)
+    mean_h = float(scaler_h.mean_[0])
+    scale_h = float(scaler_h.scale_[0])
 
-    # Prepare artifacts directory
+    print("\n--- Training Results (Weight -> Height) ---")
+    print(f"Test R^2: {r2_h_test:.4f}, Test MAE: {mae_h:.2f} cm, RMSE: {rmse_h:.2f} cm")
+    print("\n--- Training Results (Height -> Weight) ---")
+    print(f"Test R^2: {r2_w_test:.4f}, Test MAE: {mae_w:.2f} kg, RMSE: {rmse_w:.2f} kg")
+
     artifacts_dir = base_dir / "artifacts"
     artifacts_dir.mkdir(parents=True, exist_ok=True)
 
-    # Save joblib models
-    scaler_file = artifacts_dir / "scaler.joblib"
-    model_file = artifacts_dir / "model.joblib"
-    metadata_file = artifacts_dir / "model_metadata.json"
+    # Save models and scalers
+    joblib.dump(scaler_w, artifacts_dir / "scaler_w.joblib")
+    joblib.dump(model_w2h, artifacts_dir / "model_w2h.joblib")
+    joblib.dump(scaler_h, artifacts_dir / "scaler_h.joblib")
+    joblib.dump(model_h2w, artifacts_dir / "model_h2w.joblib")
 
-    joblib.dump(scaler, scaler_file)
-    joblib.dump(model, model_file)
+    # Backward compatibility aliases
+    joblib.dump(scaler_w, artifacts_dir / "scaler.joblib")
+    joblib.dump(model_w2h, artifacts_dir / "model.joblib")
 
-    # Collect data points for visualization
-    train_indices = set(X_train.index)
+    # Scatter points for plotting
+    train_indices = set(X_train_w.index)
     data_points = []
     for idx, row in df.iterrows():
         split = "train" if idx in train_indices else "test"
@@ -107,64 +123,90 @@ def train_model():
             "split": split
         })
 
-    # Generate regression line curve points
-    min_w = float(df["Weight"].min() - 10)
-    max_w = float(df["Weight"].max() + 15)
-    line_weights = np.linspace(min_w, max_w, 50)
-    line_df = pd.DataFrame({"Weight": line_weights})
-    line_weights_scaled = scaler.transform(line_df)
-    line_heights = model.predict(line_weights_scaled)
+    # Regression curves
+    line_weights = np.linspace(35, 120, 60)
+    line_w_scaled = scaler_w.transform(pd.DataFrame({"Weight": line_weights}))
+    line_heights = model_w2h.predict(line_w_scaled)
 
-    regression_line = [
+    regression_line_w2h = [
         {"weight": round(float(w), 2), "height": round(float(h), 2)}
         for w, h in zip(line_weights, line_heights)
     ]
 
     metadata = {
-        "model_name": "Standardized Linear Regression",
-        "description": "Predicts human height (cm) from weight (kg) using Ordinary Least Squares with Z-score standardization.",
+        "model_name": "Bidirectional Human Height & Weight Predictor",
+        "description": "User-friendly bidirectional predictor between body weight (kg/lbs) and height (cm/ft-in).",
+        "weight_to_height": {
+            "metrics": {
+                "r2": round(r2_h_test, 4),
+                "train_r2": round(r2_h_train, 4),
+                "adjusted_r2": round(adj_r2_h, 4),
+                "mae": round(mae_h, 2),
+                "rmse": round(rmse_h, 2),
+            },
+            "parameters": {
+                "slope": round(slope_w2h, 4),
+                "intercept": round(intercept_w2h, 4),
+                "scaler_mean": round(mean_w, 4),
+                "scaler_scale": round(scale_w, 4),
+                "formula_simplified": f"Height (cm) = {intercept_w2h - (slope_w2h * mean_w / scale_w):.2f} + {slope_w2h / scale_w:.4f} * Weight (kg)"
+            }
+        },
+        "height_to_weight": {
+            "metrics": {
+                "r2": round(r2_w_test, 4),
+                "train_r2": round(r2_w_train, 4),
+                "adjusted_r2": round(adj_r2_w, 4),
+                "mae": round(mae_w, 2),
+                "rmse": round(rmse_w, 2),
+            },
+            "parameters": {
+                "slope": round(slope_h2w, 4),
+                "intercept": round(intercept_h2w, 4),
+                "scaler_mean": round(mean_h, 4),
+                "scaler_scale": round(scale_h, 4),
+                "formula_simplified": f"Weight (kg) = {intercept_h2w - (slope_h2w * mean_h / scale_h):.2f} + {slope_h2w / scale_h:.4f} * Height (cm)"
+            }
+        },
+        # Top-level metrics maintained for backward compatibility
         "metrics": {
-            "r2": round(r2_test, 4),
-            "train_r2": round(r2_train, 4),
-            "adjusted_r2": round(adj_r2_test, 4),
-            "mae": round(mae_test, 2),
-            "mse": round(mse_test, 2),
-            "rmse": round(rmse_test, 2),
+            "r2": round(r2_h_test, 4),
+            "train_r2": round(r2_h_train, 4),
+            "adjusted_r2": round(adj_r2_h, 4),
+            "mae": round(mae_h, 2),
+            "mse": round(mse_h, 2),
+            "rmse": round(rmse_h, 2),
             "pearson_r": round(pearson_r, 4),
         },
         "parameters": {
-            "slope": round(slope, 4),
-            "intercept": round(intercept, 4),
-            "scaler_mean": round(mean_weight, 4),
-            "scaler_scale": round(scale_weight, 4),
-            "formula_latex": f"Height = {intercept:.2f} + {slope:.2f} \\times \\left(\\frac{{\\text{{Weight}} - {mean_weight:.2f}}}{{{scale_weight:.2f}}}\\right)",
-            "formula_simplified": f"Height = {intercept - (slope * mean_weight / scale_weight):.2f} + {slope / scale_weight:.4f} * Weight"
+            "slope": round(slope_w2h, 4),
+            "intercept": round(intercept_w2h, 4),
+            "scaler_mean": round(mean_w, 4),
+            "scaler_scale": round(scale_w, 4),
+            "formula_latex": f"Height = {intercept_w2h:.2f} + {slope_w2h:.2f} \\times \\left(\\frac{{\\text{{Weight}} - {mean_w:.2f}}}{{{scale_w:.2f}}}\\right)",
+            "formula_simplified": f"Height = {intercept_w2h - (slope_w2h * mean_w / scale_w):.2f} + {slope_w2h / scale_w:.4f} * Weight"
         },
         "dataset_summary": {
             "total_samples": len(df),
-            "train_samples": len(X_train),
-            "test_samples": len(X_test),
+            "train_samples": len(X_train_w),
+            "test_samples": len(X_test_w),
             "min_weight": float(df["Weight"].min()),
             "max_weight": float(df["Weight"].max()),
             "min_height": float(df["Height"].min()),
             "max_height": float(df["Height"].max()),
             "weight_mean": round(float(df["Weight"].mean()), 2),
-            "weight_std": round(float(df["Weight"].std()), 2),
             "height_mean": round(float(df["Height"].mean()), 2),
-            "height_std": round(float(df["Height"].std()), 2),
         },
         "data_points": data_points,
-        "regression_line": regression_line
+        "regression_line": regression_line_w2h
     }
 
-    with open(metadata_file, "w", encoding="utf-8") as f:
+    metadata_path = artifacts_dir / "model_metadata.json"
+    with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"\nArtifacts saved successfully in {artifacts_dir}")
-    print(f"- {scaler_file.name}")
-    print(f"- {model_file.name}")
-    print(f"- {metadata_file.name}")
+    print(f"\nAll artifacts written to {artifacts_dir}")
 
 
 if __name__ == "__main__":
-    train_model()
+    train_models()

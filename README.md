@@ -1,6 +1,6 @@
-# 🚀 Height-Weight Linear Regression — End-to-End ML Fullstack System
+# 🚀 BodyScale AI — Bidirectional Height & Weight Machine Learning Predictor
 
-> **A Production-Grade Machine Learning Web Application** predicting human height from body weight using Ordinary Least Squares Linear Regression, Z-Score feature scaling with Scikit-Learn, an asynchronous FastAPI microservice, and a modern Next.js analytics dashboard.
+> **A Consumer-Friendly & Production-Grade Machine Learning Web App** that enables anyone to enter their weight to predict their expected height, or enter their height to predict their expected weight with instant metric/imperial unit switching and real-time interactive visualization.
 
 ---
 
@@ -8,8 +8,26 @@
 
 - **Frontend Web App:** `http://localhost:3000` (Local) / Vercel (Production)
 - **FastAPI REST API & Interactive Docs:** `http://localhost:8000/docs` (Swagger UI)
-- **Tech Stack:** Python 3.13, Scikit-Learn, FastAPI, Pydantic, Next.js 16, React 19, TailwindCSS, TypeScript
+- **Tech Stack:** Python 3.13, Scikit-Learn, FastAPI, Next.js 16, React 19, TailwindCSS, JavaScript (.js / .jsx)
 
+---
+
+## ✨ Features for Everyday Users
+
+- 🔄 **Bidirectional Estimation Modes:**
+  - ⚖️ **"I Know My Weight → Predict My Height"**
+  - 📏 **"I Know My Height → Predict My Weight"**
+- 🌐 **Instant One-Click Unit Switching:**
+  - Metric: `kg` and `cm`
+  - Imperial: `lbs` and `ft & in` (e.g. 5' 9", 165 lbs)
+- 🎚️ **Effortless Input Controls:**
+  - Smooth interactive sliders with quick `+` and `-` stepper buttons and popular presets.
+- 🎯 **Crystal Clear Answers:**
+  - Big, bold primary result with typical healthy population ranges (e.g., `168 – 180 cm`).
+- 👥 **Real Survey Chart & Avatar:**
+  - Dynamic silhouette visualizer + scatter plot showing your exact position relative to 23 real surveyed adults.
+- 🔬 **Collapsible "Under the Hood" Data Science Drawer:**
+  - Kept neatly tucked away so normal users aren't overwhelmed, but immediately expandable for recruiters and data scientists to view $R^2$ scores, RMSE, MAE, regression formulas, and API endpoints!
 ---
 
 ## 🏗️ System Architecture
