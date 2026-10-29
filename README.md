@@ -6,8 +6,9 @@
 
 ## 📌 Live Demo & Overview
 
-- **Frontend Web App:** `http://localhost:3000` (Local) / Vercel (Production)
-- **FastAPI REST API & Interactive Docs:** `http://localhost:8000/docs` (Swagger UI)
+- **Frontend Web App:** [https://height-weight-ml-app.vercel.app](https://height-weight-ml-app.vercel.app)
+- **FastAPI REST API & Docs:** [https://height-weight-ml-app.onrender.com/docs](https://height-weight-ml-app.onrender.com/docs)
+- **GitHub Repository:** [https://github.com/surajpsk12/height-weight-ml-app](https://github.com/surajpsk12/height-weight-ml-app)
 - **Tech Stack:** Python 3.13, Scikit-Learn, FastAPI, Next.js 16, React 19, TailwindCSS, JavaScript (.js / .jsx)
 
 ---
