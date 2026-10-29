@@ -1,0 +1,376 @@
+{
+  "model_name": "Standardized Linear Regression",
+  "description": "Predicts human height (cm) from weight (kg) using Ordinary Least Squares with Z-score standardization.",
+  "metrics": {
+    "r2": 0.7361,
+    "train_r2": 0.9208,
+    "adjusted_r2": 0.6701,
+    "mae": 9.67,
+    "mse": 114.84,
+    "rmse": 10.72,
+    "pearson_r": 0.9311
+  },
+  "parameters": {
+    "slope": 17.2982,
+    "intercept": 156.4706,
+    "scaler_mean": 72.4706,
+    "scaler_scale": 16.5071,
+    "formula_latex": "Height = 156.47 + 17.30 \\times \\left(\\frac{\\text{Weight} - 72.47}{16.51}\\right)",
+    "formula_simplified": "Height = 80.53 + 1.0479 * Weight"
+  },
+  "dataset_summary": {
+    "total_samples": 23,
+    "train_samples": 17,
+    "test_samples": 6,
+    "min_weight": 45.0,
+    "max_weight": 105.0,
+    "min_height": 120.0,
+    "max_height": 183.0,
+    "weight_mean": 73.83,
+    "weight_std": 17.87,
+    "height_mean": 158.39,
+    "height_std": 19.51
+  },
+  "data_points": [
+    {
+      "id": 0,
+      "weight": 45.0,
+      "height": 120.0,
+      "split": "test"
+    },
+    {
+      "id": 1,
+      "weight": 58.0,
+      "height": 135.0,
+      "split": "train"
+    },
+    {
+      "id": 2,
+      "weight": 48.0,
+      "height": 123.0,
+      "split": "train"
+    },
+    {
+      "id": 3,
+      "weight": 60.0,
+      "height": 145.0,
+      "split": "train"
+    },
+    {
+      "id": 4,
+      "weight": 70.0,
+      "height": 160.0,
+      "split": "train"
+    },
+    {
+      "id": 5,
+      "weight": 78.0,
+      "height": 162.0,
+      "split": "train"
+    },
+    {
+      "id": 6,
+      "weight": 80.0,
+      "height": 163.0,
+      "split": "train"
+    },
+    {
+      "id": 7,
+      "weight": 90.0,
+      "height": 175.0,
+      "split": "train"
+    },
+    {
+      "id": 8,
+      "weight": 95.0,
+      "height": 182.0,
+      "split": "test"
+    },
+    {
+      "id": 9,
+      "weight": 78.0,
+      "height": 170.0,
+      "split": "test"
+    },
+    {
+      "id": 10,
+      "weight": 82.0,
+      "height": 176.0,
+      "split": "train"
+    },
+    {
+      "id": 11,
+      "weight": 95.0,
+      "height": 182.0,
+      "split": "train"
+    },
+    {
+      "id": 12,
+      "weight": 105.0,
+      "height": 175.0,
+      "split": "test"
+    },
+    {
+      "id": 13,
+      "weight": 100.0,
+      "height": 183.0,
+      "split": "train"
+    },
+    {
+      "id": 14,
+      "weight": 85.0,
+      "height": 170.0,
+      "split": "train"
+    },
+    {
+      "id": 15,
+      "weight": 78.0,
+      "height": 177.0,
+      "split": "test"
+    },
+    {
+      "id": 16,
+      "weight": 50.0,
+      "height": 140.0,
+      "split": "train"
+    },
+    {
+      "id": 17,
+      "weight": 65.0,
+      "height": 159.0,
+      "split": "test"
+    },
+    {
+      "id": 18,
+      "weight": 76.0,
+      "height": 150.0,
+      "split": "train"
+    },
+    {
+      "id": 19,
+      "weight": 87.0,
+      "height": 167.0,
+      "split": "train"
+    },
+    {
+      "id": 20,
+      "weight": 45.0,
+      "height": 129.0,
+      "split": "train"
+    },
+    {
+      "id": 21,
+      "weight": 56.0,
+      "height": 140.0,
+      "split": "train"
+    },
+    {
+      "id": 22,
+      "weight": 72.0,
+      "height": 160.0,
+      "split": "train"
+    }
+  ],
+  "regression_line": [
+    {
+      "weight": 35.0,
+      "height": 117.2
+    },
+    {
+      "weight": 36.73,
+      "height": 119.02
+    },
+    {
+      "weight": 38.47,
+      "height": 120.84
+    },
+    {
+      "weight": 40.2,
+      "height": 122.66
+    },
+    {
+      "weight": 41.94,
+      "height": 124.48
+    },
+    {
+      "weight": 43.67,
+      "height": 126.29
+    },
+    {
+      "weight": 45.41,
+      "height": 128.11
+    },
+    {
+      "weight": 47.14,
+      "height": 129.93
+    },
+    {
+      "weight": 48.88,
+      "height": 131.75
+    },
+    {
+      "weight": 50.61,
+      "height": 133.56
+    },
+    {
+      "weight": 52.35,
+      "height": 135.38
+    },
+    {
+      "weight": 54.08,
+      "height": 137.2
+    },
+    {
+      "weight": 55.82,
+      "height": 139.02
+    },
+    {
+      "weight": 57.55,
+      "height": 140.84
+    },
+    {
+      "weight": 59.29,
+      "height": 142.65
+    },
+    {
+      "weight": 61.02,
+      "height": 144.47
+    },
+    {
+      "weight": 62.76,
+      "height": 146.29
+    },
+    {
+      "weight": 64.49,
+      "height": 148.11
+    },
+    {
+      "weight": 66.22,
+      "height": 149.93
+    },
+    {
+      "weight": 67.96,
+      "height": 151.74
+    },
+    {
+      "weight": 69.69,
+      "height": 153.56
+    },
+    {
+      "weight": 71.43,
+      "height": 155.38
+    },
+    {
+      "weight": 73.16,
+      "height": 157.2
+    },
+    {
+      "weight": 74.9,
+      "height": 159.01
+    },
+    {
+      "weight": 76.63,
+      "height": 160.83
+    },
+    {
+      "weight": 78.37,
+      "height": 162.65
+    },
+    {
+      "weight": 80.1,
+      "height": 164.47
+    },
+    {
+      "weight": 81.84,
+      "height": 166.29
+    },
+    {
+      "weight": 83.57,
+      "height": 168.1
+    },
+    {
+      "weight": 85.31,
+      "height": 169.92
+    },
+    {
+      "weight": 87.04,
+      "height": 171.74
+    },
+    {
+      "weight": 88.78,
+      "height": 173.56
+    },
+    {
+      "weight": 90.51,
+      "height": 175.37
+    },
+    {
+      "weight": 92.24,
+      "height": 177.19
+    },
+    {
+      "weight": 93.98,
+      "height": 179.01
+    },
+    {
+      "weight": 95.71,
+      "height": 180.83
+    },
+    {
+      "weight": 97.45,
+      "height": 182.65
+    },
+    {
+      "weight": 99.18,
+      "height": 184.46
+    },
+    {
+      "weight": 100.92,
+      "height": 186.28
+    },
+    {
+      "weight": 102.65,
+      "height": 188.1
+    },
+    {
+      "weight": 104.39,
+      "height": 189.92
+    },
+    {
+      "weight": 106.12,
+      "height": 191.74
+    },
+    {
+      "weight": 107.86,
+      "height": 193.55
+    },
+    {
+      "weight": 109.59,
+      "height": 195.37
+    },
+    {
+      "weight": 111.33,
+      "height": 197.19
+    },
+    {
+      "weight": 113.06,
+      "height": 199.01
+    },
+    {
+      "weight": 114.8,
+      "height": 200.82
+    },
+    {
+      "weight": 116.53,
+      "height": 202.64
+    },
+    {
+      "weight": 118.27,
+      "height": 204.46
+    },
+    {
+      "weight": 120.0,
+      "height": 206.28
+    }
+  ]
+}
